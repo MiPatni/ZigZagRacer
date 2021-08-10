@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    public GameObject pickupFX;
     public float moveSpeed;
     bool movingLeft = true;
     bool firstInput = true;
@@ -68,6 +69,7 @@ public class CarController : MonoBehaviour
         if(other.gameObject.tag == "Diamond")
         {
             GameManager.instance.IncrementScore();
+            Instantiate(pickupFX, other.transform.position, pickupFX.transform.rotation);
             other.gameObject.SetActive(false);
         }
     }
