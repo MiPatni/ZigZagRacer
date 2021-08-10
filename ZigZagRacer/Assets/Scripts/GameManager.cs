@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public GameObject menuUI;
     public Text highscoreText;
     int highscore;
+    AudioSource audioSource;
+    public AudioClip[] gameMusic;
 
     private void Awake()
     {
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
@@ -50,6 +53,8 @@ public class GameManager : MonoBehaviour
         StopCoroutine("UpdateScore");
         gamePlayUI.SetActive(true);
         menuUI.SetActive(false);
+        audioSource.clip = gameMusic[1];
+        audioSource.Play();
         StartCoroutine("UpdateScore");
     }
 
@@ -74,6 +79,13 @@ public class GameManager : MonoBehaviour
             score++;
             scoreText.text = score.ToString();
         }
+    }
+
+    public void IncrementScore()
+    {
+        score += 2;
+        scoreText.text = score.ToString();
+        audioSource.PlayOneShot(gameMusic[2], 0.2f);
     }
 
     void SaveHighscore()
