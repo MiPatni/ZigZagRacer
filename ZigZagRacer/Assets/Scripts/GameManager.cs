@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     int highscore;
     AudioSource audioSource;
     public AudioClip[] gameMusic;
+    int adCounter = 0;
 
     private void Awake()
     {
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
     {
         highscore = PlayerPrefs.GetInt("Highscore");
         highscoreText.text = "Highscore : " + highscore;
+        CheckAdCount();
     }
 
     // Update is called once per frame
@@ -63,10 +65,21 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         platformSpawner.SetActive(false);
         SaveHighscore();
-        Invoke("ReloadLevel", 1f);
+        //AdsManager.instance.ShowAd();
+        
+        if(adCounter >= 4)
+        {
+            adCounter = 0;
+            PlayerPrefs.SetInt("AdCount", 0);
+            AdsManager.instance.ShowRewardedAd();
+        }
+        else
+        {
+            Invoke("ReloadLevel", 1f);
+        }
     }
 
-    void ReloadLevel()
+    public void ReloadLevel()
     {
         SceneManager.LoadScene("Game");
     }
@@ -102,6 +115,21 @@ public class GameManager : MonoBehaviour
         {
             //Playing for the first time
             PlayerPrefs.SetInt("Highscore", score);
+        }
+    }
+
+    void CheckAdCount()
+    {
+        if(PlayerPrefs.HasKey("AdCount"))
+        {
+            adCounter = PlayerPrefs.GetInt("AdCount");
+            adCounter++;
+
+            PlayerPrefs.SetInt("AdCount", adCounter);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("AdCount", 0);
         }
     }
 }

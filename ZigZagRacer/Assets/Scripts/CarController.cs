@@ -8,6 +8,7 @@ public class CarController : MonoBehaviour
     public float moveSpeed;
     bool movingLeft = true;
     bool firstInput = true;
+    bool gameOver = false;
     
     // Start is called before the first frame update
     void Start()
@@ -26,7 +27,11 @@ public class CarController : MonoBehaviour
 
         if(transform.position.y <= -2)
         {
-            GameManager.instance.GameOver();
+            if(!gameOver)
+            {
+                gameOver = true;
+                GameManager.instance.GameOver();
+            }
         }
     }
 
